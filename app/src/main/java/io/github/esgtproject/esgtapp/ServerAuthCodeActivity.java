@@ -57,10 +57,13 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
         // an access token. By asking for profile access (through
         // DEFAULT_SIGN_IN) you will also get an ID Token as a result of the
         // code exchange.
-        String serverClientId = getString(R.string.server_client_id);
+//        String serverClientId = getString(R.string.server_client_id);
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
+//                .requestServerAuthCode(serverClientId, false)
+//                .requestEmail()
+//                .build();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
-                .requestServerAuthCode(serverClientId)
                 .requestEmail()
                 .build();
         // [END configure_signin]
@@ -115,7 +118,8 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
             if (result.isSuccess()) {
                 // [START get_auth_code]
                 GoogleSignInAccount acct = result.getSignInAccount();
-                String authCode = acct.getServerAuthCode();
+//                String authCode = acct.getServerAuthCode();
+                String authCode = acct.getDisplayName();
 
                 // Show signed-in UI.
                 mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, authCode));
