@@ -13,11 +13,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Demonstrates retrieving an offline access one-time code for the current Google user, which
@@ -57,13 +70,10 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
         // an access token. By asking for profile access (through
         // DEFAULT_SIGN_IN) you will also get an ID Token as a result of the
         // code exchange.
-//        String serverClientId = getString(R.string.server_client_id);
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
-//                .requestServerAuthCode(serverClientId, false)
-//                .requestEmail()
-//                .build();
+        String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
+                .requestServerAuthCode(serverClientId)
                 .requestEmail()
                 .build();
         // [END configure_signin]
@@ -118,20 +128,71 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
             if (result.isSuccess()) {
                 // [START get_auth_code]
                 GoogleSignInAccount acct = result.getSignInAccount();
-//                String authCode = acct.getServerAuthCode();
-                String authCode = acct.getDisplayName();
+                String authCode = acct.getServerAuthCode();
+                String displayName = acct.getDisplayName();
+//                String authCode = acct.getIdToken();
 
                 // Show signed-in UI.
                 mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, authCode));
                 updateUI(true);
 
-                // TODO(user): send code to server and exchange for access/refresh/ID tokens.
                 // [END get_auth_code]
+
+                // TODO(user): send code to server and exchange for access/refresh/ID tokens.
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("auth_code", authCode);
+                } catch (JSONException e) {
+                    Log.e(TAG, e.toString());
+                }
+                String url = "http://esgt.ddns.net:8000/googleauth";
+                Log.d(TAG, json.toString());
+                Log.d(TAG, authCode);
+                //TODO: Use JSON
+                post(url, authCode, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        // Something went wrong
+                        Log.d(TAG, "POST FAILED");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String responseStr = response.body().string();
+                            Log.d(TAG, responseStr);
+                            // Do what you want to do with the response.
+                        } else {
+                            Log.d(TAG, "POST FAILED");
+                            // Request not successful
+                        }
+                    }
+                });
+
             } else {
                 // Show signed-out UI.
                 updateUI(false);
             }
         }
+    }
+
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    OkHttpClient client = new OkHttpClient();
+    //TODO: Use JSON to allow ID and auth code to be sent in form authentication
+    Call post(String url, String authCode, Callback callback) {
+//        RequestBody body = RequestBody.create(JSON, json);
+        RequestBody body = new FormBody.Builder()
+                .add("auth_code", authCode)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+        return call;
     }
 
     @Override
