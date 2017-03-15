@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp" />
-            <option value="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp/app" />
+            <option value="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App" />
+            <option value="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

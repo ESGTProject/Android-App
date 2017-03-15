@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, ServerAuthCodeActivity.class);
-                MainActivity.this.startActivity(myIntent);
+                Intent loginIntent = new Intent(MainActivity.this, ServerAuthCodeActivity.class);
+                MainActivity.this.startActivity(loginIntent);
             }
         });
     }
@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            MainActivity.this.startActivity(settingsIntent);
             return true;
         }
 
