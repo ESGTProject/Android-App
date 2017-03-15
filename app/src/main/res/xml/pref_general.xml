@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
@@ -42,6 +43,7 @@
         android:entryValues="@array/pref_news_source_values"
         android:key="pref_news_source"
         android:negativeButtonText="@null"
+        android:persistent="false"
         android:positiveButtonText="@null"
         android:title="@string/pref_news_source_title" />
 
@@ -49,6 +51,8 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="pref_use_imperial"
+        android:summaryOff="@string/pref_use_imperial_off"
+        android:summaryOn="@string/pref_use_imperial_on"
         android:title="@string/pref_use_imperial_title" />
 
 </PreferenceScreen>
