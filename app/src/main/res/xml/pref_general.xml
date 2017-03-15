@@ -7,7 +7,7 @@
         android:capitalize="words"
         android:defaultValue="@string/pref_display_name_default"
         android:inputType="textCapWords"
-        android:key="pref_display_name"
+        android:key="@string/pref_display_name_key"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
@@ -21,7 +21,7 @@
         android:defaultValue="1"
         android:entries="@array/pref_time_zone_entries"
         android:entryValues="@array/pref_time_zone_values"
-        android:key="pref_time_zone"
+        android:key="@string/pref_time_zone_key"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_time_zone_title" />
@@ -31,28 +31,33 @@
     <ListPreference
         android:entries="@array/pref_weather_location_entries"
         android:entryValues="@array/pref_weather_location_values"
-        android:key="pref_weather_location"
+        android:key="@string/pref_weather_location_key"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_weather_location_title" />
 
 
     <!--News Source -->
-    <MultiSelectListPreference
+    <ListPreference
         android:entries="@array/pref_news_source_entries"
         android:entryValues="@array/pref_news_source_values"
-        android:key="pref_news_source"
+        android:key="@string/pref_news_source_key"
         android:negativeButtonText="@null"
-        android:persistent="false"
         android:positiveButtonText="@null"
         android:title="@string/pref_news_source_title" />
 
     <!--Temperature Scale -->
     <SwitchPreference
         android:defaultValue="false"
-        android:key="pref_use_imperial"
+        android:key="@string/pref_use_imperial_key"
         android:summaryOff="@string/pref_use_imperial_off"
         android:summaryOn="@string/pref_use_imperial_on"
         android:title="@string/pref_use_imperial_title" />
+
+    <Preference
+        android:title="@string/pref_google_login_title"
+        android:key="@string/pref_google_login_key">
+        <intent android:action="@string/intent_launch_google_login"/>
+    </Preference>
 
 </PreferenceScreen>

@@ -21,17 +21,12 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Nothing happens, yet", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-
             @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(MainActivity.this, ServerAuthCodeActivity.class);
-                MainActivity.this.startActivity(loginIntent);
+            public void onClick(View view) {
+                Snackbar.make(view, "Nothing happens, yet", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
+
         });
     }
 

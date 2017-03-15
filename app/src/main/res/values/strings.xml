@@ -47,6 +47,7 @@
     <!--============-->
     <!--Display Name-->
     <!--============-->
+    <string name="pref_display_name_key">display_name</string>
     <string name="pref_display_name_title">Display Name</string>
     <string name="pref_display_name_default">John Smith</string>
 
@@ -54,6 +55,7 @@
     <!--=========-->
     <!--Time Zone-->
     <!--=========-->
+    <string name="pref_time_zone_key">time_zone</string>
     <string name="pref_time_zone_title">Time Zone</string>
     <string-array name="pref_time_zone_entries">
         <!--TODO: Add more-->
@@ -76,6 +78,7 @@
     <!--===========-->
     <!--Temperature-->
     <!--===========-->
+    <string name="pref_use_imperial_key">use_imperial</string>
     <string name="pref_use_imperial_title">Use Imperial Units</string>
     <string name="pref_use_imperial_on">Use Fahrenheit</string>
     <string name="pref_use_imperial_off">Use Celcius</string>
@@ -83,6 +86,7 @@
     <!--==================-->
     <!--Location (weather)-->
     <!--==================-->
+    <string name="pref_weather_location_key">weather_location</string>
     <string name="pref_weather_location_title">Weather Location</string>
     <string-array name="pref_weather_location_entries">
         <!--TODO: Add more, uses city list json from Open Weather Map-->
@@ -105,6 +109,7 @@
     <!--===========-->
     <!--News Source-->
     <!--===========-->
+    <string name="pref_news_source_key">news_source</string>
     <string name="pref_news_source_title">News Sources</string>
     <string-array name="pref_news_source_entries" >
         <item>ABC</item>
@@ -252,6 +257,13 @@
     </string-array>
 
 
+
+    <!--============-->
+    <!--Google Login-->
+    <!--============-->
+    <string name="pref_google_login_key">google_login</string>
+    <string name="pref_google_login_title">Google Login</string>
+    <string name="intent_launch_google_login">intent_launch_google_login</string>
 
 
     <!-- Example settings for Data & Sync -->
