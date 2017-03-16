@@ -146,7 +146,7 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
                 } catch (JSONException e) {
                     Log.e(TAG, e.toString());
                 }
-                String url = "http://esgt.ddns.net:8000/googleauth";
+                String url = "http://esgt.ddns.net:8000/googleauth"; //TODO: Use string resource
                 Log.d(TAG, json.toString());
                 Log.d(TAG, authCode);
                 //TODO: Use JSON
