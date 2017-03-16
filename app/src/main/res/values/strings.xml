@@ -34,6 +34,12 @@
     <string name="server_client_id">577511514187-15srkmag7k49er0ho8lh9lrahni9gud1.apps.googleusercontent.com</string>
 
 
+    <!-- =========== -->
+    <!-- URL Strings -->
+    <!-- =========== -->
+    <string name="url_config">http://esgt.ddns.net:8000/config</string>
+    <string name="url_google_auth">http://esgt.ddns.net:8000/googleauth</string>>
+
     <!-- =========================== -->
     <!--       Settings Strings      -->
     <!-- =========================== -->

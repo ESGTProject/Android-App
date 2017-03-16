@@ -45,22 +45,28 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 Map<String,?> map = mSharedPreferences.getAll();
-                JSONObject json = new JSONObject(map);
+                JSONObject configJson = new JSONObject(map);
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("username", "ESGTproject@gmail.com");
+                    json.put("config", configJson);
+                    json.put("refresh_tokens", "NONE");
+                } catch (JSONException e) {
+                    Log.e("MainActivity", e.getMessage());
+                }
                 Log.d("MainActivity", json.toString());
                 //TODO: Use string resource
-                /*
-                post("http://esgt.ddns.net:8000/config", json, new Callback() {
+                post(getString(R.string.url_config), json, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                       showSnackback("Sent POST");
+                        showSnackback("Sent POST successfully!");
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        showSnackback("Failed to send POST");
+                        showSnackback("Failed to send POST...");
                     }
                 });
-                */
             }
 
         });
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
     //TODO: Use JSON to allow ID and auth code to be sent in form authentication
     private Call post(String url, JSONObject json, Callback callback) {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
                 .url(url)

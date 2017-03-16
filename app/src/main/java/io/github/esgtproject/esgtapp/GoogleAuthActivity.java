@@ -146,7 +146,7 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 } catch (JSONException e) {
                     Log.e(TAG, e.toString());
                 }
-                String url = "http://esgt.ddns.net:8000/googleauth"; //TODO: Use string resource
+                String url = getString(R.string.url_google_auth);
                 Log.d(TAG, json.toString());
                 Log.d(TAG, authCode);
                 //TODO: Use JSON
