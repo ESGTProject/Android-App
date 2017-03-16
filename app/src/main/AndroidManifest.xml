@@ -19,24 +19,23 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ServerAuthCodeActivity"
-            android:label="@string/name_auth_code_activity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+            android:name=".GoogleAuthActivity"
+            android:label="@string/google_auth_activity_name"
+            android:parentActivityName=".SettingsActivity">
             <intent-filter>
                 <action android:name="intent_launch_google_login"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

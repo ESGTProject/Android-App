@@ -36,11 +36,11 @@ import okhttp3.Response;
  * Demonstrates retrieving an offline access one-time code for the current Google user, which
  * can be exchanged by your server for an access token and refresh token.
  */
-public class ServerAuthCodeActivity extends AppCompatActivity implements
+public class GoogleAuthActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
-    public static final String TAG = "ServerAuthCodeActivity";
+    public static final String TAG = "GoogleAuthActivity";
     private static final int RC_GET_AUTH_CODE = 9003;
 
     private GoogleApiClient mGoogleApiClient;

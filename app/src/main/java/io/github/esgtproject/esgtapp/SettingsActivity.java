@@ -128,7 +128,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -151,7 +150,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
