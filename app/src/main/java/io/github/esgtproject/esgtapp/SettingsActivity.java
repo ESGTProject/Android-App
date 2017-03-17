@@ -148,6 +148,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         @Override
+        public void onResume() {
+            super.onResume();
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_username_key)));
+        }
+
+        @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {

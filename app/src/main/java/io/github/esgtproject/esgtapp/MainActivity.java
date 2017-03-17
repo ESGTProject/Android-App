@@ -68,29 +68,30 @@ public class MainActivity extends AppCompatActivity {
         // Get configuration and compare timestamp
         Map<String,String> params = new HashMap<>();
         params.put("username", username);
-        get(getString(R.string.url_config), params, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                showSnackback("Could not get configs from online database ...");
-            }
+        pushConfig(); //TODO: sync changes
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, response.body().string());
-                    pushConfig(); //TODO: sync changes
+//        get(getString(R.string.url_config), params, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                showSnackback("Could not get configs from online database ...");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    Log.d(TAG, response.body().string());
 //                    try {
 //                        JSONObject json = new JSONObject(response.body().string());
 //                    } catch (org.json.JSONException e) {
 //                        Log.e(TAG, "JSON parse error");
 //                    }
 
-                } else {
-                    Log.d(TAG, "GET FAILED");
-                    showSnackback("Failed to send Get ...");
-                }
-            }
-        });
+//                } else {
+//                    Log.d(TAG, "GET FAILED");
+//                    showSnackback("Failed to send Get ...");
+//                }
+//            }
+//        });
     }
 
 

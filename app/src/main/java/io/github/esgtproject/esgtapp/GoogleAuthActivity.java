@@ -131,7 +131,9 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 // [START get_auth_code]
                 GoogleSignInAccount acct = result.getSignInAccount();
                 String authCode = acct.getServerAuthCode();
+                String email = acct.getEmail();
                 String displayName = acct.getDisplayName();
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putString(getString(R.string.pref_username_key), email).apply();
                 //String authCode = acct.getIdToken();
                 //TODO: Send id identification token
 
@@ -142,7 +144,7 @@ public class GoogleAuthActivity extends AppCompatActivity implements
 
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("username", PreferenceManager.getDefaultSharedPreferences(this).getString("username", "default_user"));
+                    json.put("username", email);
                     json.put("auth_code", authCode);
                 } catch (JSONException e) {
                     Log.e(TAG, e.toString());
@@ -153,7 +155,6 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 post(url, json, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        // Something went wrong
                         Log.d(TAG, "Send failure");
                     }
 
@@ -162,10 +163,8 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                         if (response.isSuccessful()) {
                             String responseStr = response.body().string();
                             Log.d(TAG, responseStr);
-                            // Do what you want to do with the response.
                         } else {
                             Log.d(TAG, "POST FAILED");
-                            // Request not successful
                         }
                     }
                 });
