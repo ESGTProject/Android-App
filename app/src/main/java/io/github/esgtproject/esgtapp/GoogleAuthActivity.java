@@ -75,7 +75,7 @@ public class GoogleAuthActivity extends AppCompatActivity implements
         String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
-                .requestServerAuthCode(serverClientId)
+                .requestServerAuthCode(serverClientId, true)
                 .requestEmail()
                 .build();
         // [END configure_signin]
