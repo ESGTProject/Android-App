@@ -30,9 +30,10 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final String TAG = "MainActivity";
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -52,21 +53,27 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     json.put("username", username);
                     json.put("config", configJson);
-                    json.put("refresh_tokens", "NONE");
                 } catch (JSONException e) {
-                    Log.e("MainActivity", e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
-                Log.d("MainActivity", json.toString());
+                Log.d(TAG, json.toString());
                 //TODO: Use string resource
                 post(getString(R.string.url_config), json, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        showSnackback("Failed to send POST...");
+                        showSnackback("Could not send POST ...");
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        showSnackback("Sent POST successfully!");
+                        if (response.isSuccessful()) {
+                            String responseStr = response.body().string();
+                            Log.d(TAG, responseStr);
+                            showSnackback("POST sent successfully!");
+                        } else {
+                            Log.d(TAG, "POST FAILED");
+                            showSnackback("Failed to send POST...");
+                        };
                     }
                 });
             }
@@ -80,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
     }
 
-    OkHttpClient client = new OkHttpClient();
     private Call post(String url, JSONObject json, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()

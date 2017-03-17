@@ -1,7 +1,9 @@
 package io.github.esgtproject.esgtapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -130,18 +132,17 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 GoogleSignInAccount acct = result.getSignInAccount();
                 String authCode = acct.getServerAuthCode();
                 String displayName = acct.getDisplayName();
-//                String authCode = acct.getIdToken();
+                //String authCode = acct.getIdToken();
+                //TODO: Send id identification token
 
                 // Show signed-in UI.
                 mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, authCode));
                 updateUI(true);
-
                 // [END get_auth_code]
-
-                // TODO(user): send code to server and exchange for access/refresh/ID tokens.
 
                 JSONObject json = new JSONObject();
                 try {
+                    json.put("username", PreferenceManager.getDefaultSharedPreferences(this).getString("username", "default_user"));
                     json.put("auth_code", authCode);
                 } catch (JSONException e) {
                     Log.e(TAG, e.toString());
@@ -149,12 +150,11 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 String url = getString(R.string.url_google_auth);
                 Log.d(TAG, json.toString());
                 Log.d(TAG, authCode);
-                //TODO: Use JSON
-                post(url, authCode, new Callback() {
+                post(url, json, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         // Something went wrong
-                        Log.d(TAG, "POST FAILED");
+                        Log.d(TAG, "Send failure");
                     }
 
                     @Override
@@ -177,15 +177,10 @@ public class GoogleAuthActivity extends AppCompatActivity implements
         }
     }
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    OkHttpClient client = new OkHttpClient();
-    //TODO: Use JSON to allow ID and auth code to be sent in form authentication
-    Call post(String url, String authCode, Callback callback) {
-//        RequestBody body = RequestBody.create(JSON, json);
-        RequestBody body = new FormBody.Builder()
-                .add("auth_code", authCode)
-                .build();
+    private Call post(String url, JSONObject json, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
