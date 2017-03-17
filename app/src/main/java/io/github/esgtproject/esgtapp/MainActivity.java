@@ -45,10 +45,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 Map<String,?> map = mSharedPreferences.getAll();
+                String username = (String) map.get("username");
+                map.remove("username");
                 JSONObject configJson = new JSONObject(map);
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("username", "ESGTproject@gmail.com");
+                    json.put("username", username);
                     json.put("config", configJson);
                     json.put("refresh_tokens", "NONE");
                 } catch (JSONException e) {
@@ -59,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
                 post(getString(R.string.url_config), json, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        showSnackback("Sent POST successfully!");
+                        showSnackback("Failed to send POST...");
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        showSnackback("Failed to send POST...");
+                        showSnackback("Sent POST successfully!");
                     }
                 });
             }
@@ -79,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     OkHttpClient client = new OkHttpClient();
-    //TODO: Use JSON to allow ID and auth code to be sent in form authentication
     private Call post(String url, JSONObject json, Callback callback) {
         MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON, json.toString());

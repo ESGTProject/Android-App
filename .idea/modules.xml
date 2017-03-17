@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file:///Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App/Android-App.iml" filepath="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App/Android-App.iml" />
-      <module fileurl="file:///Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp/ESGTApp.iml" filepath="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp/ESGTApp.iml" />
       <module fileurl="file:///Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App/app/app.iml" filepath="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/Android-App/app/app.iml" />
-      <module fileurl="file:///Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp/app/app.iml" filepath="/Volumes/OSX_HD/Users/KKozuma/Documents/Projects/ESGT/ESGTApp/app/app.iml" />
     </modules>
   </component>
 </project>

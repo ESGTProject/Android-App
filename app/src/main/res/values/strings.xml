@@ -52,6 +52,10 @@
     <string name="pref_general_category_title">General</string>
     <string name="pref_general_category_key">category_general</string>
 
+    <!--User Name-->
+    <string name="pref_username_key">username</string>
+    <string name="pref_username_title">Username</string>
+
     <!--Display Name-->
     <string name="pref_display_name_key">display_name</string>
     <string name="pref_display_name_title">Display Name</string>
