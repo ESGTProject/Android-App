@@ -92,11 +92,11 @@
         <item>Mumbai</item>
     </string-array>
     <string-array name="pref_weather_location_values">
-        <item>8581</item>
-        <item>0439</item>
-        <item>0147</item>
-        <item>8341</item>
-        <item>5339</item>
+        <item>5128581</item>
+        <item>4180439</item>
+        <item>1850147</item>
+        <item>1668341</item>
+        <item>1275339</item>
     </string-array>
 
     <!--Temperature Units-->
