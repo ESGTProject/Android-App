@@ -150,12 +150,9 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.startActivity(settingsIntent);
             return true;
         } else if (id == R.id.action_signout) {
-            FirebaseAuth.getInstance().signOut();
-            SharedPreferences settings = getSharedPreferences(SignInActivity.PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("signed_in", false);
-            editor.apply();
-            Intent mIntent = new Intent(this, SplashActivity.class);
+            // Launch signin activity with sign out
+            Intent mIntent = new Intent(MainActivity.this, SignInActivity.class);
+            mIntent.putExtra("action", "signout");
             startActivity(mIntent);
             MainActivity.this.finish();
         }

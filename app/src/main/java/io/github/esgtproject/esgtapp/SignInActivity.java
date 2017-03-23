@@ -64,16 +64,14 @@ public class SignInActivity extends AppCompatActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
-    private TextView mDetailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_main);
+        setContentView(R.layout.activity_signin);
 
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -124,6 +122,7 @@ public class SignInActivity extends AppCompatActivity implements
         mAuth.addAuthStateListener(mAuthListener);
     }
     // [END on_start_add_listener]
+
 
     // [START on_stop_remove_listener]
     @Override
@@ -179,11 +178,7 @@ public class SignInActivity extends AppCompatActivity implements
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            SharedPreferences settings = getSharedPreferences(SignInActivity.PREFS_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putBoolean("signed_in", true);
-                            editor.apply();
-
+                            setSignState(true);
                             Intent mIntent = new Intent(SignInActivity.this, MainActivity.class);
                             startActivity(mIntent);
                             SignInActivity.this.finish();
@@ -195,6 +190,13 @@ public class SignInActivity extends AppCompatActivity implements
                 });
     }
     // [END auth_with_google]
+
+    private void setSignState(boolean signedIn) {
+        SharedPreferences settings = getSharedPreferences(SignInActivity.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("signed_in", signedIn);
+        editor.apply();
+    }
 
     // [START signin]
     private void signIn() {
@@ -215,6 +217,7 @@ public class SignInActivity extends AppCompatActivity implements
                         updateUI(null);
                     }
                 });
+        setSignState(false);
     }
 
     private void revokeAccess() {
@@ -229,18 +232,17 @@ public class SignInActivity extends AppCompatActivity implements
                         updateUI(null);
                     }
                 });
+        setSignState(false);
     }
 
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog(); //TODO: Show progress
         if (user != null) {
-//            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-//            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            mStatusTextView.setText(user.getEmail());
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);

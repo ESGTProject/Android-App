@@ -23,6 +23,7 @@
         <activity
             android:name=".SignInActivity"
             android:label="@string/google_auth_activity_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:parentActivityName=".SettingsActivity">
             <intent-filter>
                 <action android:name="intent_launch_google_login"/>
