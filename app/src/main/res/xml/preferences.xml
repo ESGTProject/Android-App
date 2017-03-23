@@ -66,54 +66,54 @@
         android:title="@string/pref_services_category_title"
         android:key="@string/pref_services_category_key">
         <!--Google Login-->
-        <Preference
-            android:title="@string/pref_google_login_title"
-            android:key="@string/pref_google_login_key">
-            <intent android:action="@string/intent_launch_google_login"/>
-        </Preference>
+        <!--<Preference-->
+            <!--android:title="@string/pref_google_login_title"-->
+            <!--android:key="@string/pref_google_login_key">-->
+            <!--<intent android:action="@string/intent_launch_google_login"/>-->
+        <!--</Preference>-->
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/pref_data_sync_category_title"
-        android:key="@string/pref_data_sync_category_key">
-        <!--Sync Frequency-->
-        <ListPreference
-            android:defaultValue="180"
-            android:entries="@array/pref_sync_frequency_entries"
-            android:entryValues="@array/pref_sync_frequency_values"
-            android:key="sync_frequency"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_sync_frequency_title" />
+    <!--<PreferenceCategory-->
+        <!--android:title="@string/pref_data_sync_category_title"-->
+        <!--android:key="@string/pref_data_sync_category_key">-->
+        <!--&lt;!&ndash;Sync Frequency&ndash;&gt;-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="180"-->
+            <!--android:entries="@array/pref_sync_frequency_entries"-->
+            <!--android:entryValues="@array/pref_sync_frequency_values"-->
+            <!--android:key="sync_frequency"-->
+            <!--android:negativeButtonText="@null"-->
+            <!--android:positiveButtonText="@null"-->
+            <!--android:title="@string/pref_sync_frequency_title" />-->
 
-        <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
-             design guidelines. -->
-        <Preference android:title="@string/pref_title_system_sync_settings">
-            <intent android:action="android.settings.SYNC_SETTINGS" />
-        </Preference>
-    </PreferenceCategory>
+        <!--&lt;!&ndash; This preference simply launches an intent when selected. Use this UI sparingly, per-->
+             <!--design guidelines. &ndash;&gt;-->
+        <!--<Preference android:title="@string/pref_title_system_sync_settings">-->
+            <!--<intent android:action="android.settings.SYNC_SETTINGS" />-->
+        <!--</Preference>-->
+    <!--</PreferenceCategory>-->
 
-    <PreferenceCategory
-        android:title="@string/pref_notifications_category_title"
-        android:key="@string/pref_notifications_category_key">
+    <!--<PreferenceCategory-->
+        <!--android:title="@string/pref_notifications_category_title"-->
+        <!--android:key="@string/pref_notifications_category_key">-->
 
-        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/pref_new_message_notifications_key"
-            android:title="@string/pref_new_message_notifications_title" />
+        <!--&lt;!&ndash; NOTE: This preference will be enabled only when the checkbox above is checked. &ndash;&gt;-->
+        <!--<SwitchPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:key="@string/pref_new_message_notifications_key"-->
+            <!--android:title="@string/pref_new_message_notifications_title" />-->
 
-        <RingtonePreference
-            android:defaultValue="content://settings/system/notification_sound"
-            android:dependency="@string/pref_new_message_notifications_key"
-            android:key="@string/pref_notification_ringtone_key"
-            android:ringtoneType="notification"
-            android:title="@string/pref_notification_ringtone_title" />
+        <!--<RingtonePreference-->
+            <!--android:defaultValue="content://settings/system/notification_sound"-->
+            <!--android:dependency="@string/pref_new_message_notifications_key"-->
+            <!--android:key="@string/pref_notification_ringtone_key"-->
+            <!--android:ringtoneType="notification"-->
+            <!--android:title="@string/pref_notification_ringtone_title" />-->
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:dependency="@string/pref_new_message_notifications_key"
-            android:key="@string/pref_notification_vibrate_key"
-            android:title="@string/pref_notification_vibrate_title" />
-    </PreferenceCategory>
+        <!--<SwitchPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:dependency="@string/pref_new_message_notifications_key"-->
+            <!--android:key="@string/pref_notification_vibrate_key"-->
+            <!--android:title="@string/pref_notification_vibrate_title" />-->
+    <!--</PreferenceCategory>-->
 </PreferenceScreen>

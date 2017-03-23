@@ -209,7 +209,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_weather_location_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_news_source_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_google_login_key)));
         }
 
         @Override

@@ -262,10 +262,6 @@
     <string name="pref_services_category_title">Services</string>
     <string name="pref_services_category_key">category_services</string>
 
-    <!--Google Login-->
-    <string name="pref_google_login_key">google_login</string>
-    <string name="pref_google_login_title">Google Login</string>
-    <string name="intent_launch_google_login">intent_launch_google_login</string>
 
     <!--==============-->
     <!-- Data & Sync  -->

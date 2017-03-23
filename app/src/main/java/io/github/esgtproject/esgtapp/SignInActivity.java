@@ -19,6 +19,7 @@ package io.github.esgtproject.esgtapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -103,9 +104,12 @@ public class SignInActivity extends AppCompatActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    setPrefUser(firebaseAuth.getCurrentUser());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    setPrefUser(null);
+                    //TODO: Clear preferences on sign out
                 }
                 // [START_EXCLUDE]
                 updateUI(user);
@@ -195,6 +199,19 @@ public class SignInActivity extends AppCompatActivity implements
         SharedPreferences settings = getSharedPreferences(SignInActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("signed_in", signedIn);
+        editor.apply();
+    }
+
+    private void setPrefUser(FirebaseUser user) {
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(SignInActivity.this);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        if (user != null) {
+            editor.putString("username", user.getEmail());
+            editor.putString("display_name", user.getDisplayName());
+        } else {
+            editor.putString("username", null);
+            editor.putString("display_name", null);
+        }
         editor.apply();
     }
 
