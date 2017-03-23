@@ -51,7 +51,7 @@ public class SignInActivity extends AppCompatActivity implements
 
     public static final String PREFS_NAME = "SIGNINACTIVITY_PREFS";
 
-    private static final String TAG = "GoogleActivity";
+    private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
     // [START declare_auth]
