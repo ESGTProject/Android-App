@@ -14,13 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/google_auth_activity_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:parentActivityName=".SettingsActivity">
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -28,8 +37,8 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
-            android:name=".GoogleAuthActivity"
-            android:label="@string/google_auth_activity_name"
+            android:name=".GoogleServiceActivity"
+            android:label="@string/title_activity_settings"
             android:parentActivityName=".SettingsActivity">
             <intent-filter>
                 <action android:name="intent_launch_google_login"/>

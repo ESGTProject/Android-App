@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserConfig();
+                showSnackback("Does nothing!");
             }
         });
     }
@@ -57,43 +63,6 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
-    private void getUserConfig() {
-        // Get preferences
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final Map<String,?> preferenceMap = mSharedPreferences.getAll();
-        final String username = (String) preferenceMap.get("username");
-        preferenceMap.remove("username");
-
-        // Get configuration and compare timestamp
-        Map<String,String> params = new HashMap<>();
-        params.put("username", username);
-        pushConfig(); //TODO: sync changes
-
-//        get(getString(R.string.url_config), params, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                showSnackback("Could not get configs from online database ...");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    Log.d(TAG, response.body().string());
-//                    try {
-//                        JSONObject json = new JSONObject(response.body().string());
-//                    } catch (org.json.JSONException e) {
-//                        Log.e(TAG, "JSON parse error");
-//                    }
-
-//                } else {
-//                    Log.d(TAG, "GET FAILED");
-//                    showSnackback("Failed to send Get ...");
-//                }
-//            }
-//        });
-    }
-
 
     private void pushConfig() {
         // Get preferences
@@ -180,6 +149,12 @@ public class MainActivity extends AppCompatActivity {
             Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             MainActivity.this.startActivity(settingsIntent);
             return true;
+        } else if (id == R.id.action_signout) {
+            // Launch signin activity with sign out
+            Intent mIntent = new Intent(MainActivity.this, SignInActivity.class);
+            mIntent.putExtra("action", "signout");
+            startActivity(mIntent);
+            MainActivity.this.finish();
         }
 
         return super.onOptionsItemSelected(item);

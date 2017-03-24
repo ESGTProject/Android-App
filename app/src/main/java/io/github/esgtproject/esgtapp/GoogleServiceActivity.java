@@ -38,7 +38,7 @@ import okhttp3.Response;
  * Demonstrates retrieving an offline access one-time code for the current Google user, which
  * can be exchanged by your server for an access token and refresh token.
  */
-public class GoogleAuthActivity extends AppCompatActivity implements
+public class GoogleServiceActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
@@ -46,15 +46,13 @@ public class GoogleAuthActivity extends AppCompatActivity implements
     private static final int RC_GET_AUTH_CODE = 9003;
 
     private GoogleApiClient mGoogleApiClient;
-    private TextView mAuthCodeTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_main);
+        setContentView(R.layout.activity_google_service);
 
         // Views
-        mAuthCodeTextView = (TextView) findViewById(R.id.detail);
 
         // Button click listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -132,13 +130,11 @@ public class GoogleAuthActivity extends AppCompatActivity implements
                 GoogleSignInAccount acct = result.getSignInAccount();
                 String authCode = acct.getServerAuthCode();
                 String email = acct.getEmail();
-                String displayName = acct.getDisplayName();
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putString(getString(R.string.pref_username_key), email).apply();
                 //String authCode = acct.getIdToken();
                 //TODO: Send id identification token
 
                 // Show signed-in UI.
-                mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, authCode));
                 updateUI(true);
                 // [END get_auth_code]
 
@@ -204,7 +200,6 @@ public class GoogleAuthActivity extends AppCompatActivity implements
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
-            mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, "null"));
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);

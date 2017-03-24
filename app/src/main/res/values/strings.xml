@@ -1,7 +1,10 @@
 <resources>
     <!--App Strings-->
     <string name="app_name">ESGT App</string>
+
+    <!--Main Activity-->
     <string name="action_settings">Settings</string>
+    <string name="action_signout">Signout</string>
 
     <!-- Google Login Activity -->
     <string name="title_text">Google Sign-In</string>
@@ -38,7 +41,7 @@
     <!-- URL Strings -->
     <!-- =========== -->
     <string name="url_config">http://esgt.ddns.net:8000/config</string>
-    <string name="url_google_auth">http://esgt.ddns.net:8000/googleauth</string>>
+    <string name="url_google_auth">http://esgt.ddns.net:8000/googleauth</string>
 
     <!-- =========================== -->
     <!--       Settings Strings      -->
@@ -260,10 +263,8 @@
     <string name="pref_services_category_title">Services</string>
     <string name="pref_services_category_key">category_services</string>
 
-    <!--Google Login-->
-    <string name="pref_google_login_key">google_login</string>
-    <string name="pref_google_login_title">Google Login</string>
-    <string name="intent_launch_google_login">intent_launch_google_login</string>
+    <string name="pref_google_login_title">Google Services</string>
+    <string name="pref_google_login_key">google_login_key</string>
 
     <!--==============-->
     <!-- Data & Sync  -->
