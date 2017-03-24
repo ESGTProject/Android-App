@@ -108,8 +108,10 @@ public class SignInActivity extends AppCompatActivity implements
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-                    setPrefUser(null);
-                    //TODO: Clear preferences on sign out
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SignInActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.apply();
                 }
                 // [START_EXCLUDE]
                 updateUI(user);
