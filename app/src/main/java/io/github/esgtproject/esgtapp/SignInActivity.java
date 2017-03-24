@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -81,8 +82,10 @@ public class SignInActivity extends AppCompatActivity implements
 
         // [START config_signin]
         // Configure Google Sign In
+        String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
+                .requestServerAuthCode(serverClientId, true)
                 .requestEmail()
                 .build();
         // [END config_signin]
