@@ -66,11 +66,11 @@
         android:title="@string/pref_services_category_title"
         android:key="@string/pref_services_category_key">
         <!--Google Login-->
-        <!--<Preference-->
-            <!--android:title="@string/pref_google_login_title"-->
-            <!--android:key="@string/pref_google_login_key">-->
-            <!--<intent android:action="@string/intent_launch_google_login"/>-->
-        <!--</Preference>-->
+        <Preference
+            android:title="@string/pref_google_login_title"
+            android:key="@string/pref_google_login_key">
+            <intent android:action="intent_launch_google_login"/>
+        </Preference>
     </PreferenceCategory>
 
     <!--<PreferenceCategory-->
