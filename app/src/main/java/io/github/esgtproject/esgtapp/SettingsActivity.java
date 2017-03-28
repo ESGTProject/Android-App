@@ -283,6 +283,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void updatePreferenceSummaries() {
             setPreferenceScreen(null);
             addPreferencesFromResource(R.xml.preferences);
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_username_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_display_name_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_weather_location_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_news_source_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_use_imperial_key)));
         }
     }
 }
