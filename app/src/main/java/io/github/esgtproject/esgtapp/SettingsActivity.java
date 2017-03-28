@@ -146,8 +146,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        // [START initialize_database_ref]
+        // Initialize Firebase database reference
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        // Not updated from Firebase yet
+        refreshedFromFirebase = false; //TODO: Do not push preferences until update from server
 
         // Read from the database (Only once)
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -155,12 +158,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                //String value = dataSnapshot.getValue(String.class);
-                //Log.d(TAG, "Value is: " + value);
                 updatePrefsFromFirebase(SettingsActivity.this, dataSnapshot);
                 ((SettingsFragment)getFragmentManager().findFragmentById(android.R.id.content)).updatePreferenceSummaries();
-                //TODO: Update selection in listpreference
-                refreshedFromFirebase = true;
+                refreshedFromFirebase = true; //TODO: Do not push preferences until update from server
             }
 
             @Override
@@ -169,14 +169,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        // [END initialize_database_ref]
 
         // Shared preference listener attached update changes to Firebase
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mPrefListener);
-
-        // Not updated from Firebase yet
-        refreshedFromFirebase = false;
     }
 
     @Override
@@ -190,29 +186,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     // Update preferences from Firebase database
     private static void updatePrefsFromFirebase(Context mContext, DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() != null) {
-            Log.d(TAG, "SNAPSHOT:" + dataSnapshot.getValue());
-            String jsonString = dataSnapshot.getValue().toString();
-            if (jsonString != null) {
-                // Get shared preferences
-                SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
-                // Convert json to map, and store to preferences
-                Gson gson = new Gson();
-                Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
-                Map<String,String> map = gson.fromJson(jsonString, stringStringMap);
-                Iterator it = map.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-                    if (pair.getKey().equals(mContext.getString(R.string.pref_use_imperial_key))) {
-                        mEditor.putBoolean(pair.getKey().toString(), Boolean.parseBoolean(pair.getValue().toString()));
-                    } else {
-                        mEditor.putString(pair.getKey().toString(), pair.getValue().toString());
-                    }
-                    it.remove();
+            Log.d(TAG, dataSnapshot.getValue().toString());
+
+            // Get shared preferences
+            SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+
+            Map<String, String> preferenceMap = (Map<String,String>)dataSnapshot.getValue();
+
+            // Restore from Firebase preference
+            Iterator it = preferenceMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                if (pair.getKey().equals(mContext.getString(R.string.pref_use_imperial_key))) {
+                    mEditor.putBoolean(pair.getKey().toString(), Boolean.parseBoolean(pair.getValue().toString()));
+                } else {
+                    mEditor.putString(pair.getKey().toString(), pair.getValue().toString());
                 }
-                mEditor.apply();
+                it.remove();
             }
+            mEditor.apply();
         }
     }
 
@@ -221,14 +215,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // Get preferences
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         final Map<String,?> preferenceMap = mSharedPreferences.getAll();
-        preferenceMap.remove("username");
 
         // Update firebase
-        JSONObject configJson = new JSONObject(preferenceMap);
-        Log.d(TAG, "Sent json: " + configJson.toString());
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && user.getEmail() != null) {
-            mDatabase.setValue(configJson.toString());
+            mDatabase.setValue(preferenceMap);
         }
     }
     /**
