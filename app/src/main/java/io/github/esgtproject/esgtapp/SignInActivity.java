@@ -186,7 +186,10 @@ public class SignInActivity extends AppCompatActivity implements
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            setSignState(true);
+                            // Send HTTP post with user id and device id to Firebase
+
+                            setSignState(true); // Set preference to skip login on next launch
+                            // Launch main activity
                             Intent mIntent = new Intent(SignInActivity.this, MainActivity.class);
                             startActivity(mIntent);
                             SignInActivity.this.finish();

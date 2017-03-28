@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -71,6 +72,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+            Log.d(TAG, "Updated pref:" + stringValue);
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -130,10 +132,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        if (preference instanceof SwitchPreference) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext())
+                    .getBoolean(preference.getKey(), false));
+        } else {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext())
+                    .getString(preference.getKey(), ""));
+        }
     }
 
 
@@ -146,21 +153,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        // [START initialize_database_ref]
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        // Initialize Firebase database reference
+        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, "User:" + uuid);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uuid);
+
+        // Not updated from Firebase yet
+        refreshedFromFirebase = false; //TODO: Do not push preferences until update from server
 
         // Read from the database (Only once)
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //String value = dataSnapshot.getValue(String.class);
-                //Log.d(TAG, "Value is: " + value);
                 updatePrefsFromFirebase(SettingsActivity.this, dataSnapshot);
+                refreshedFromFirebase = true; //TODO: Do not push preferences until update from server
                 ((SettingsFragment)getFragmentManager().findFragmentById(android.R.id.content)).updatePreferenceSummaries();
-                //TODO: Update selection in listpreference
-                refreshedFromFirebase = true;
             }
 
             @Override
@@ -169,14 +176,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        // [END initialize_database_ref]
 
         // Shared preference listener attached update changes to Firebase
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mPrefListener);
-
-        // Not updated from Firebase yet
-        refreshedFromFirebase = false;
     }
 
     @Override
@@ -190,29 +193,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     // Update preferences from Firebase database
     private static void updatePrefsFromFirebase(Context mContext, DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() != null) {
-            Log.d(TAG, "SNAPSHOT:" + dataSnapshot.getValue());
-            String jsonString = dataSnapshot.getValue().toString();
-            if (jsonString != null) {
-                // Get shared preferences
-                SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
-                // Convert json to map, and store to preferences
-                Gson gson = new Gson();
-                Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
-                Map<String,String> map = gson.fromJson(jsonString, stringStringMap);
-                Iterator it = map.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-                    if (pair.getKey().equals(mContext.getString(R.string.pref_use_imperial_key))) {
-                        mEditor.putBoolean(pair.getKey().toString(), Boolean.parseBoolean(pair.getValue().toString()));
-                    } else {
-                        mEditor.putString(pair.getKey().toString(), pair.getValue().toString());
-                    }
-                    it.remove();
+            // Output value to log
+            Log.d(TAG, dataSnapshot.getValue().toString());
+
+            // Get shared preferences
+            SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+
+            // Get map from Firebase snapshot
+            Map<String, String> preferenceMap = (Map<String,String>)dataSnapshot.getValue();
+
+            // Restore from Firebase preference
+            Iterator it = preferenceMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                if (pair.getKey().equals(mContext.getString(R.string.pref_use_imperial_key))) {
+                    mEditor.putBoolean(pair.getKey().toString(), Boolean.parseBoolean(pair.getValue().toString()));
+                } else {
+                    mEditor.putString(pair.getKey().toString(), pair.getValue().toString());
                 }
-                mEditor.apply();
+                it.remove();
             }
+            mEditor.apply();
         }
     }
 
@@ -221,14 +224,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // Get preferences
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         final Map<String,?> preferenceMap = mSharedPreferences.getAll();
-        preferenceMap.remove("username");
 
         // Update firebase
-        JSONObject configJson = new JSONObject(preferenceMap);
-        Log.d(TAG, "Sent json: " + configJson.toString());
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && user.getEmail() != null) {
-            mDatabase.setValue(configJson.toString());
+            mDatabase.setValue(preferenceMap);
         }
     }
     /**
@@ -263,7 +263,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_weather_location_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_news_source_key)));
-            // TODO: Bind imperial temperature
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_use_imperial_key)));
         }
 
         @Override
@@ -281,19 +281,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
 
+        // Force committed preference updates to take place
         public void updatePreferenceSummaries() {
-            updatePreferenceSummary(findPreference(getString(R.string.pref_username_key)));
-            updatePreferenceSummary(findPreference(getString(R.string.pref_display_name_key)));
-            updatePreferenceSummary(findPreference(getString(R.string.pref_time_zone_key)));
-            updatePreferenceSummary(findPreference(getString(R.string.pref_weather_location_key)));
-            updatePreferenceSummary(findPreference(getString(R.string.pref_news_source_key)));
-        }
-
-        private void updatePreferenceSummary(Preference preference) {
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), ""));
+            setPreferenceScreen(null);
+            addPreferencesFromResource(R.xml.preferences);
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_username_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_display_name_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_weather_location_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_news_source_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_use_imperial_key)));
         }
     }
 }
