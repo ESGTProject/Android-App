@@ -154,7 +154,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 .commit();
 
         // Initialize Firebase database reference
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, "User:" + uuid);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uuid);
 
         // Not updated from Firebase yet
         refreshedFromFirebase = false; //TODO: Do not push preferences until update from server
