@@ -154,19 +154,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 .commit();
 
         // Initialize Firebase database reference
-        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d(TAG, "User:" + uuid);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uuid);
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, "User:" + uid);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("config");
 
         // Not updated from Firebase yet
-        refreshedFromFirebase = false; //TODO: Do not push preferences until update from server
+        refreshedFromFirebase = false;
 
         // Read from the database (Only once)
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 updatePrefsFromFirebase(SettingsActivity.this, dataSnapshot);
-                refreshedFromFirebase = true; //TODO: Do not push preferences until update from server
+                refreshedFromFirebase = true;
                 ((SettingsFragment)getFragmentManager().findFragmentById(android.R.id.content)).updatePreferenceSummaries();
             }
 
@@ -258,6 +258,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
 
+            bindPreferenceSummaryToValues();
+        }
+
+        private void bindPreferenceSummaryToValues() {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_username_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_display_name_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
@@ -285,12 +289,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void updatePreferenceSummaries() {
             setPreferenceScreen(null);
             addPreferencesFromResource(R.xml.preferences);
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_username_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_display_name_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_time_zone_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_weather_location_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_news_source_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_use_imperial_key)));
+            bindPreferenceSummaryToValues();
         }
     }
 }

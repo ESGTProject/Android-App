@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
-
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -62,72 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private void showSnackback(String message) {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-    }
-
-    private void pushConfig() {
-        // Get preferences
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final Map<String,?> preferenceMap = mSharedPreferences.getAll();
-        final String username = (String) preferenceMap.get("username");
-        preferenceMap.remove("username");
-
-        // Send POST request
-        JSONObject configJson = new JSONObject(preferenceMap);
-        JSONObject json = new JSONObject();
-        try {
-            json.put("username", username);
-            json.put("config", configJson);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        Log.d(TAG, json.toString());
-        post(getString(R.string.url_config), json, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                showSnackback("Could not send POST ...");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    Log.d(TAG, responseStr);
-                    showSnackback("POST sent successfully!");
-                } else {
-                    Log.d(TAG, "POST FAILED");
-                    showSnackback("Failed to send POST...");
-                }
-            }
-        });
-    }
-
-    private Call get(String url, Map<String,String> params, Callback callback) {
-        HttpUrl httpUrl = HttpUrl.parse(url);
-        HttpUrl.Builder builder = httpUrl.newBuilder();
-        for (Map.Entry<String,String> entry : params.entrySet()) {
-            builder.setQueryParameter(entry.getKey(), entry.getValue());
-        }
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(builder.toString())
-                .get()
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-        return call;
-    }
-
-    private Call post(String url, JSONObject json, Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        MediaType JSON = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(JSON, json.toString());
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-        return call;
     }
 
     @Override
