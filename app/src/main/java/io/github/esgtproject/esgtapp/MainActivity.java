@@ -13,11 +13,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +47,10 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
+    public static final String LOG_TAG = "MainActivity";
+
+    // Firebase database reference
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +59,50 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Instantiate Firebase database
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+
+
+        final EditText editTextDeviceUid = (EditText) findViewById(R.id.edittext_device_uid);
+        final Button buttonPair = (Button) findViewById(R.id.button_pair);
+        buttonPair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDeviceUser(editTextDeviceUid.getText().toString());
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSnackback("Does nothing!");
+                showSnackback("Does Nothing!");
+            }
+        });
+    }
+
+    private void updateDeviceUser(final String deviceUid) {
+
+        // Get user UID
+        final String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Read from the database (Only once)
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(deviceUid)) {
+                    Log.d(LOG_TAG, "Invalid deviceUID:" + deviceUid);
+                    showSnackback("Error, could not find device:" + deviceUid);
+                } else {
+                    mDatabase.child(deviceUid).child("user_current").setValue(userUid);
+                    showSnackback("Paired with device:" + deviceUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(LOG_TAG, "Failed to read value.", error.toException());
             }
         });
     }
