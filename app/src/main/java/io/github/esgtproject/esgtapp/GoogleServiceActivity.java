@@ -123,6 +123,7 @@ public class GoogleServiceActivity extends AppCompatActivity implements
                 String authCode = acct.getServerAuthCode();
                 Map<String,String> tokenMap = new HashMap<>();
                 tokenMap.put("google", authCode);
+
                 mDatabase.setValue(tokenMap);
 
                 // Show signed-in UI.

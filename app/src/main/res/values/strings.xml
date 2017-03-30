@@ -34,7 +34,7 @@
 
     <!-- Server Client ID.  This should be a valid Web OAuth 2.0 Client ID obtained
          from https://console.developers.google.com/ -->
-    <string name="server_client_id">577511514187-15srkmag7k49er0ho8lh9lrahni9gud1.apps.googleusercontent.com</string>
+    <string name="server_client_id">577511514187-od32sdlnu97uhvsespqfeues6idl4081.apps.googleusercontent.com</string>
 
     <!-- =========================== -->
     <!--       Settings Strings      -->
