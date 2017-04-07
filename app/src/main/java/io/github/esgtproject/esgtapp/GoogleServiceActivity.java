@@ -65,7 +65,7 @@ public class GoogleServiceActivity extends AppCompatActivity implements
         // code exchange.
         String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"), new Scope("https://www.googleapis.com/auth/calendar.readonly"))
                 .requestServerAuthCode(serverClientId, true)
                 .build();
         // [END configure_signin]
