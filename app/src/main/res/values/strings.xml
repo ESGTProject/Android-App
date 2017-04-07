@@ -107,7 +107,7 @@
     <!--News Source-->
     <string name="pref_news_source_key">news_source</string>
     <string name="pref_news_source_title">News Sources</string>
-    <string-array name="pref_news_source_entries" >
+    <string-array name="pref_news_source_entries">
         <item>ABC</item>
         <item>Ars Technica</item>
         <item>AP</item>
@@ -179,7 +179,7 @@
         <item>Wired</item>
         <item>Wirtschafts Whoche</item>
     </string-array>
-    <string-array name="pref_news_source_values" >
+    <string-array name="pref_news_source_values">
         <item>abc-news-au</item>
         <item>ars-technica</item>
         <item>associated-press</item>
