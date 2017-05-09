@@ -1,6 +1,8 @@
-# Android-App
+# Overview
 Android application to configure ESGT devices.
 To build the application, import the application from the github repository.
+
+![Sign In](https://github.com/ESGTProject/Android-App/blob/master/google-signin.png)
 
 # Firebase Setup
 1) Register the SHA1 fingerprint of the computer used to build the Android application on the Firebase console. This is necessary to use the Google APIs for sign-in methods.
@@ -24,7 +26,11 @@ To pair the Android application with an ESGT device, the following steps are nec
 * Type in the UID that corresponds to the ESGT device. Note that if there is no UID, the backend server has not yet run successfully with Firebase integration. Please run the backend server at least once to generate a UID.
 * Click the "Pair" button. A Snackbar will show indicating whether the pairing was successful.
 
+![UID Input](https://github.com/ESGTProject/Android-App/blob/master/uid-input.png)
+
 ## Configuration Changes
 * To get to the configuration settings, click the three dots in the top right corner, then click "settings"
 * The Settings activity is self-explanatory. Any changes made in these settings will be reflected immediately in the Firebase console.
 * Ensure that changes are made instantly by checking the "Database" tab in the Firebase console.
+
+![Settings](https://github.com/ESGTProject/Android-App/blob/master/settings.png)
